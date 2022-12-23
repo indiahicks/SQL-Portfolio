@@ -1,0 +1,25 @@
+## Which warehouses are delievering the most orders 
+SELECT
+  Warehouse.warehouse_id
+  CONCAT(Warehouse.state, ':', Warehouse.warehouse_alias_
+  COUNT(Orders.orders.id) AS number_of_orders,
+  (SELECT
+    COUNT(*)
+   FROM warehouse_orders.Orders Orders)
+  AS total_orders,
+  CASE 
+    WHEN COUNT(orders.order_id) / (SELECT COUNT(*) FROM warehouse_order.Orders Orders) <= 0.20
+    THEN "Fufilled 0-20% of Orders"
+    WHEN COUNT(orders.order_id) / (SELECT COUNT(*) FROM warehouse_order.Orders Orders) > 0.20 
+    AND COUNT(orders.order_id) / (SELECT COUNT(*) FROM warehouse_order.Orders Orders) <= 0.60
+    THEN "Fufilled 21-61% of Orders"
+  ELSE "Filfilled more than 60% of Orders"
+  END AS fulfillment_summary
+ FROM warehouse_orders.Warehouse Warehouse
+ LEFT JOIN warehouse_orders.Orders Orders 
+  ON Orders.warehouse_id = Warehouse.warehouse_id
+ GROUP BY 
+  Warehouse.warehouse_id
+  Warehouse_name
+ HAVING
+  COUNT(Orders.order_id) > 0
