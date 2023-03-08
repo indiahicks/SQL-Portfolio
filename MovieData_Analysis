@@ -1,6 +1,66 @@
+--AGG FUNCTION 
 SELECT release_year, AVG(budget) AS avg_budget, AVG(gross) AS avg_gross
 FROM films
 WHERE release_year > 1990
 GROUP BY release_year
 HAVING AVG(budget) > 60000000
 LIMIT 5 
+
+
+--WINDOW FUNCTION
+SELECT * FROM 
+(SELECT 
+name,
+country,
+COUNT(*),
+DENSE_RANK() OVER(PARTITION BY country ORDER BY name) as rank
+FROM customer_list cl 
+LEFT JOIN payment p 
+ON cl.id = p.customer_id 
+GROUP BY name,country) as subquery 
+WHERE rank IN (1,2,3) 
+
+-- CASE WHEN 
+SELECT count(*),
+CASE
+	WHEN replacement_cost < 20 THEN 'LOW'
+	WHEN replacement_cost < 25 THEN 'MEDIUM'
+	ELSE 'HIGH'
+END as replacement_price
+FROM film 
+GROUP BY replacement_price
+
+
+--CREATE VIEW to a list of movies with their length, title, and category - filtered to only show movies in 'Action' and 'Comedy'
+CREATE VIEW films_category
+AS
+SELECT title, length, name 
+FROM film f
+LEFT JOIN film_category fc
+ON f.film_id = fc.film_id 
+INNER JOIN category c 
+ON fc.category_id = c.category_id
+WHERE name IN ('Action', 'Comedy')
+ORDER BY LENGTH DESC
+
+--Show only movies titles, their associated film_id + lengths that have the highest length in each rating category – also show the rating 
+SELECT title, film_id, length 
+FROM film f1
+WHERE length = (SELECT MAX(length) FROM film 2
+				WHERE f1.rating = f2.replacement) -- CORRELEATED SUBQUERY (WHERE)
+
+-- SHOW PAIRS OF MOVIES THAT HAVE THE SAME LENGTH USING SELF JOIN
+SELECT 
+title1.title,
+title2.title,
+title1.length as length 
+FROM film title1
+LEFT JOIN film title2 
+ON title1.length = title2.length – use the column/s you want to compare 
+WHERE title1.title != title2.title – not equal to 
+ORDER BY length DESC
+
+
+
+
+
