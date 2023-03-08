@@ -138,3 +138,30 @@ FROM sales
 WHERE payment_type = 'Amex'
 
 
+-- Created a funsction that returns the total sum for the  payments using there first and last name as parameters 
+CREATE FUNCTION name_search (f_name VARCHAR(30),l_name VARCHAR(30)
+RETURNS INT
+LANGUAGE plpgsql
+AS
+$$
+DECLARE 
+customer_payments INT;
+BEGIN 
+SELECT SUM(amount)
+INTO customer_payments
+FROM payment p 
+INNER JOIN customer c
+ON p.customer_id = c.customer_id –  
+WHERE first_name = f_name – 
+AND last_name = l_name;
+RETURN customer_payments; 
+END;
+$$
+
+CREATE INDEX index_rental_id_payment  --- Btree index was used 
+ON payment 
+(rental_id) --- created a index on the column used for filtering took actually less than a second 
+
+DROP INDEX index_rental_id_payment – used this to trop the index when was drop went back to taking forever 
+
+
