@@ -9,3 +9,19 @@ INSERT INTO furniture_store_inventory VALUES (5, "King Beds", 67, 1300,3);
 SELECT name, aisle 
 FROM furniture_store_inventory 
 ORDER BY price;
+
+
+
+
+
+SELECT 
+TO_CHAR(book_date, 'Dy'),
+TO_CHAR(book_date, 'Mon'),
+CASE
+WHEN TO_CHAR(book_date,'Dy') = 'Mon' THEN 'Monday special’
+WHEN TO_CHAR(book_date,'Mon')= 'Jul' THEN 'July Special'
+ELSE ‘no special’
+END
+FROM bookings
+
+
