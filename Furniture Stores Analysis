@@ -33,6 +33,23 @@ END
 FROM sales
 
 
+USED WINDOW FUNCTION & GROUPING SETS TO calculates the share of revenue each staff_id makes 
+SELECT 
+first_name,
+last_name,
+staff_id, 
+SUM(amount) as total,
+ROUND(SUM(amount)/
+FIRST_VALUE(SUM(amount)) OVER(PARTITION BY (first_name,last_name) ORDER by SUM(amount)DESC) *100,2) – use FIRST_VALUE () to show the largest value first
+FROM payment p
+LEFT JOIN  customer c 
+ON p.customer_id = c.customer_id 
+GROUP BY 
+	GROUPING SETS (
+	(first_name, last_name),
+	(staff_id,first_name,last_name))
+
+
 
 -- Created a function that returns the total sum for the  payments using there first and last name as parameters 
 CREATE FUNCTION name_search (f_name VARCHAR(30),l_name VARCHAR(30)
