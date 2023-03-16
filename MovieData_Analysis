@@ -21,14 +21,14 @@ FROM film
 --WINDOW FUNCTION -- 
 SELECT * FROM 
 (SELECT 
-name,
-country,
+title,
+city,
 COUNT(*),
-DENSE_RANK() OVER(PARTITION BY country ORDER BY name) as rank
-FROM customer_list cl 
-LEFT JOIN payment p 
-ON cl.id = p.customer_id 
-GROUP BY name,country) as subquery 
+DENSE_RANK() OVER(PARTITION BY city ORDER BY title) as rank
+FROM theater_list tl 
+LEFT JOIN films p 
+ON tl.movie_id = p.film_id 
+GROUP BY name,city) as subquery 
 WHERE rank IN (1,2,3) 
 
 -- CASE WHEN 
@@ -42,7 +42,9 @@ FROM film
 GROUP BY replacement_price
 
 
---CREATE VIEW to a list of movies with their length, title, and category - filtered to only show movies in 'Action' and 'Comedy'
+
+
+--CREATED VIEW to a list of movies with their length, title, and category - filtered to only show movies in 'Action' and 'Comedy'
 CREATE VIEW films_category
 AS
 SELECT title, length, name 
