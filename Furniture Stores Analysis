@@ -21,6 +21,18 @@ SELECT ROUND(AVG(price), 2) As average_amex)purchase_amount
 FROM sales 
 WHERE payment_type = 'Amex'
 
+-- Manipulated data with a CASE WHEN statement to highlight transactions during sales specials 
+SELECT 
+TO_CHAR(transaction_date, 'Dy'),
+TO_CHAR(transaction_date, 'Mon'),
+CASE
+WHEN TO_CHAR(transaction_date,'Dy') = 'Mon' THEN 'Monday special’
+WHEN TO_CHAR(transaction_date,'Mon')= 'Jul' THEN 'July Special'
+ELSE ‘no special’
+END
+FROM sales
+
+
 
 -- Created a function that returns the total sum for the  payments using there first and last name as parameters 
 CREATE FUNCTION name_search (f_name VARCHAR(30),l_name VARCHAR(30)
