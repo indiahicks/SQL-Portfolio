@@ -1,3 +1,67 @@
+
+## Understand how much AMEX users were spending, what product thet were buying, and where they were from 
+
+SELECT transaction_date AS date,payment_type AS card_used, price, product, country 
+FROM sales WHERE payment_type = "Amex" 
+ORDER by price DESC 
+LIMIT 10;
+
+## Total Purchases with Amex as payment method 
+SELECT COUNT(payment_type) AS total_AMEX_purchases 
+FROM sales 
+WHERE payment_type = 'Amex'
+
+## The names of Amex users + when they created their accounts vs. when they purchased from the site vs. the last time they logged into the site
+SELECT name, payment_type, account_created
+FROM sales 
+WHERE payment_type = 'Amex'
+
+## The average amount Amex users are paying
+SELECT ROUND(AVG(price), 2) As average_amex)purchase_amount
+FROM sales 
+WHERE payment_type = 'Amex'
+
+
+-- Created a function that returns the total sum for the  payments using there first and last name as parameters 
+CREATE FUNCTION name_search (f_name VARCHAR(30),l_name VARCHAR(30)
+RETURNS INT
+LANGUAGE plpgsql
+AS
+$$
+DECLARE 
+customer_payments INT;
+BEGIN 
+SELECT SUM(amount)
+INTO customer_payments
+FROM payment p 
+INNER JOIN customer c
+ON p.customer_id = c.customer_id –  
+WHERE first_name = f_name – 
+AND last_name = l_name;
+RETURN customer_payments; 
+END;
+$$
+
+-- USED A CORRELATED SUBQUERY to show all the payments plus the total amount for every customer as well as the number of payments of each customer 
+SELECT payment_id, customer_id, staff_id,amount, -- column names 
+(SELECT SUM(amount) as sum_amount FROM payment p2 WHERE p2.customer_id = p1.customer_id),
+(SELECT COUNT(*) as count_payments FROM payment p3 WHERE p1.customer_id = p3.customer_id)
+FROM payment p1
+ORDER by  p1.customer_id, p1.amount DESC
+
+--Created a view to track customer spending 
+
+CREATE VIEW customer_spendings
+AS
+SELECT CONCAT(first_name,' ', last_name) as name,
+SUM(amount) as total_amount 
+FROM customer c
+LEFT JOIN payment p
+ON c.customer_id = p.customer_id 
+GROUP BY name
+
+
+-- Created a sales TABLE 
 CREATE TABLE sales(
   ID INTEGER  NOT NULL PRIMARY KEY
 , transaction_date TEXT
@@ -114,51 +178,4 @@ INSERT INTO sales(transaction_date,product,price,payment_type,name,city,state,co
 INSERT INTO sales(transaction_date,product,price,payment_type,name,city,state,country,account_created,last_login,latitude,longitude) VALUES ('1/6/09 21:13','Chair',1200,'Visa','Kofi','Vancouver','British Columbia','Canada','1/7/08 21:16','1/14/09 20:50',49.25,-123.1333333);
 INSERT INTO sales(transaction_date,product,price,payment_type,name,city,state,country,account_created,last_login,latitude,longitude) VALUES ('1/14/09 11:19','Chair',1200,'Visa','Jennifer','Jumeira','Dubayy','United Arab Emirates','1/14/09 10:44','1/14/09 21:26',25.2097222,55.2477778);
 INSERT INTO sales(transaction_date,product,price,payment_type,name,city,state,country,account_created,last_login,latitude,longitude) VALUES ('1/13/09 19:39','Chair',1200,'Visa','Jolene','Englewood','CO','United states','1/6/09 22:00','1/14/09 22:02',39.64778,-104.98722);
-
-## Understand how much AMEX users were spending, what product thet were buying, and where they were from 
-
-SELECT transaction_date AS date,payment_type AS card_used, price, product, country 
-FROM sales WHERE payment_type = "Amex" 
-ORDER by price DESC 
-LIMIT 10;
-
-## Total Purchases with Amex as payment method 
-SELECT COUNT(payment_type) AS total_AMEX_purchases 
-FROM sales 
-WHERE payment_type = 'Amex'
-
-## The names of Amex users + when they created their accounts vs. when they purchased from the site vs. the last time they logged into the site
-SELECT name, payment_type, account_created
-FROM sales 
-WHERE payment_type = 'Amex'
-
-## The average amount Amex users are paying
-SELECT ROUND(AVG(price), 2) As average_amex)purchase_amount
-FROM sales 
-WHERE payment_type = 'Amex'
-
-
--- Created a funsction that returns the total sum for the  payments using there first and last name as parameters 
-CREATE FUNCTION name_search (f_name VARCHAR(30),l_name VARCHAR(30)
-RETURNS INT
-LANGUAGE plpgsql
-AS
-$$
-DECLARE 
-customer_payments INT;
-BEGIN 
-SELECT SUM(amount)
-INTO customer_payments
-FROM payment p 
-INNER JOIN customer c
-ON p.customer_id = c.customer_id –  
-WHERE first_name = f_name – 
-AND last_name = l_name;
-RETURN customer_payments; 
-END;
-$$
-
-
-
-
 
