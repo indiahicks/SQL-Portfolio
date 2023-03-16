@@ -18,7 +18,7 @@ FROM film
 
 
 
---WINDOW FUNCTION -- 
+--WINDOW FUNCTION to rank values by film title, grouped theater city
 SELECT * FROM 
 (SELECT 
 title,
@@ -28,7 +28,7 @@ DENSE_RANK() OVER(PARTITION BY city ORDER BY title) as rank
 FROM theater_list tl 
 LEFT JOIN films p 
 ON tl.movie_id = p.film_id 
-GROUP BY name,city) as subquery 
+GROUP BY title,city) as subquery 
 WHERE rank IN (1,2,3) 
 
 -- CASE WHEN 
