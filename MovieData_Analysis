@@ -1,13 +1,24 @@
 --AGG FUNCTION 
 SELECT release_year, AVG(budget) AS avg_budget, AVG(gross) AS avg_gross
-FROM films
+FROM film
 WHERE release_year > 1990
 GROUP BY release_year
 HAVING AVG(budget) > 60000000
 LIMIT 5 
 
 
---WINDOW FUNCTION
+-- SUM(CASE..WHEN..) to count the numbers of titles in each rating category 
+
+SELECT
+SUM(CASE WHEN rating = 'G'THEN 1 ELSE 0 END) AS "G",
+SUM(CASE WHEN rating = 'PG'THEN 1 ELSE 0 END) AS "PG",
+SUM(CASE WHEN rating = 'NC-17' THEN 1 ELSE END) AS "NC-17",
+SUM(CASE WHEN rating = 'PG-13'THEN 1 ELSE 0 END) AS "PG-13",
+FROM film
+
+
+
+--WINDOW FUNCTION -- 
 SELECT * FROM 
 (SELECT 
 name,
