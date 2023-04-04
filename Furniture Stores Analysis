@@ -40,7 +40,7 @@ last_name,
 staff_id, 
 SUM(amount) as total,
 ROUND(SUM(amount)/
-FIRST_VALUE(SUM(amount)) OVER(PARTITION BY (first_name,last_name) ORDER by SUM(amount)DESC) *100,2) – use FIRST_VALUE () to show the largest value first
+FIRST_VALUE(SUM(amount)) OVER(PARTITION BY (first_name,last_name) ORDER by SUM(amount)DESC) *100,2) – 
 FROM payment p
 LEFT JOIN  customer c 
 ON p.customer_id = c.customer_id 
