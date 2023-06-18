@@ -1,12 +1,12 @@
 
-## Understand how much AMEX users were spending, what product thet were buying, and where they were from 
+## Understand how much AMEX users were spending, what products they were buying, and where they were from 
 
 SELECT transaction_date AS date,payment_type AS card_used, price, product, country 
 FROM sales WHERE payment_type = "Amex" 
 ORDER by price DESC 
 LIMIT 10;
 
-## Total Purchases with Amex as payment method 
+## Total Purchases with Amex as the payment method 
 SELECT COUNT(payment_type) AS total_AMEX_purchases 
 FROM sales 
 WHERE payment_type = 'Amex'
@@ -33,7 +33,7 @@ END
 FROM sales
 
 
-USED WINDOW FUNCTION & GROUPING SETS TO calculates the share of revenue each staff_id makes 
+USED WINDOW FUNCTION & GROUPING SETS TO calculate the share of revenue each staff_id makes 
 SELECT 
 first_name,
 last_name,
@@ -51,7 +51,7 @@ GROUP BY
 
 
 
--- Created a function that returns the total sum for the  payments using there first and last name as parameters 
+-- Created a function that returns the total sum for the  payments using their first and last names as parameters 
 CREATE FUNCTION name_search (f_name VARCHAR(30),l_name VARCHAR(30)
 RETURNS INT
 LANGUAGE plpgsql
