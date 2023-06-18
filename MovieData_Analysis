@@ -7,7 +7,7 @@ HAVING AVG(budget) > 60000000
 LIMIT 5 
 
 
--- SUM(CASE..WHEN..) to count the numbers of titles in each rating category 
+-- SUM(CASE..WHEN..) to count the number of titles in each rating category 
 
 SELECT
 SUM(CASE WHEN rating = 'G'THEN 1 ELSE 0 END) AS "G",
@@ -60,7 +60,7 @@ ORDER BY LENGTH DESC
 SELECT title, film_id, length 
 FROM film f1
 WHERE length = (SELECT MAX(length) FROM film 2
-				WHERE f1.rating = f2.replacement) -- CORRELEATED SUBQUERY (WHERE)
+				WHERE f1.rating = f2.replacement) -- CORRELATED SUBQUERY (WHERE)
 
 -- SHOW PAIRS OF MOVIES THAT HAVE THE SAME LENGTH USING SELF JOIN
 SELECT 
