@@ -56,7 +56,7 @@ ON fc.category_id = c.category_id
 WHERE name IN ('Action', 'Comedy')
 ORDER BY LENGTH DESC
 
---Show only movies titles, their associated film_id + lengths that have the highest length in each rating category – also show the rating 
+--Show only movie titles, their associated film_id + lengths that have the highest length in each rating category – Also show the rating 
 SELECT title, film_id, length 
 FROM film f1
 WHERE length = (SELECT MAX(length) FROM film 2
@@ -69,8 +69,8 @@ title2.title,
 title1.length as length 
 FROM film title1
 LEFT JOIN film title2 
-ON title1.length = title2.length – use the column/s you want to compare 
-WHERE title1.title != title2.title – not equal to 
+ON title1.length = title2.length 
+WHERE title1.title != title2.title 
 ORDER BY length DESC
 
 
